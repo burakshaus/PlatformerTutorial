@@ -1,34 +1,57 @@
 package main;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import inputs.KeyboardInputs;
 import inputs.MouseInputs;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.*;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
 
 public class GamePanel extends JPanel{
 	
 	private MouseInputs mouseInputs;
 	private float xDelta = 100, yDelta = 100;
-	private float xDir = 1, yDir = 1;
-	private int frames = 0;
-	private long lastCheck = 0;
-	private Color color = new Color(120,20,50);
-	private Random random;
-	
+	private BufferedImage img , subImg;
+
+
 	public GamePanel() {
-		random = new Random();
 		mouseInputs = new MouseInputs(this);
+		setPanelSize();
+		importImg();
+		
 		addKeyListener(new KeyboardInputs(this));
 		addMouseListener(new MouseInputs(this));
 		addMouseMotionListener(mouseInputs);
 	}
 	
+	private void importImg() {
+		
+		InputStream is = getClass().getResourceAsStream("/player_sprites.png");
+		
+		try {
+			img = ImageIO.read(is);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void setPanelSize() {
+		Dimension size = new Dimension(1280, 800);
+		setMinimumSize(size);
+		setPreferredSize(size);
+		setMaximumSize(size);
+	}
+
 	public void changedXDelta(int value) {
 		this.xDelta += value;
 		
@@ -47,34 +70,13 @@ public class GamePanel extends JPanel{
 		
 		super.paintComponent(g);
 		
-		updateRectangel();
+		subImg = img.getSubimage(1*64, 8*40, 64, 40);
 		
-		g.setColor(color);
-		// x, y, width and height
-		g.fillRect((int) xDelta,(int) yDelta, 200, 50);
-		
+		g.drawImage(subImg, (int)xDelta, (int)yDelta, 128, 80, null);
 		
 
 		
 	}
 
-	private void updateRectangel() {
-		xDelta += xDir;
-		if (xDelta > 400 || xDelta < 0 ) {
-			xDir *= -1;
-			color = getRandomColor();
-		}
-		yDelta += yDir;
-		if (yDelta > 400 || yDelta <0) {
-			yDir *= -1;
-			color = getRandomColor();
-		}
-	}
-
-	private Color getRandomColor() {
-		int r = random.nextInt(255);
-		int g = random.nextInt(255); 
-		int b = random.nextInt(255);
-		return new Color(r,g,b);
-	}
+	
 }

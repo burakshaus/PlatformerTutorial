@@ -9,12 +9,14 @@ public class GameWindow {
 	public GameWindow(GamePanel gamepanel) {
 		
 		JFrame jframe = new JFrame();
-		
-		jframe.setSize(400, 400);
-				
+						
 		jframe.setDefaultCloseOperation(jframe.EXIT_ON_CLOSE);
 		
 		jframe.add(gamepanel);
+		
+		jframe.setResizable(false);
+		
+		jframe.pack();
 		
 		jframe.setVisible(true);
 		
