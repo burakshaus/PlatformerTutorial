@@ -1,6 +1,7 @@
 package entities;
 
 import static utils.Constants.Directions.*;
+import static main.Game.*;
 import static utils.Constants.PlayerConstants.GetSpriteAmount;
 import static utils.Constants.PlayerConstants.*;
 
@@ -11,6 +12,7 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
+import main.Game;
 import utils.LoadSave;
 
 public class Player extends Entity{
@@ -37,7 +39,10 @@ public class Player extends Entity{
 	}
 	
 	public void render(Graphics g) {
-		g.drawImage(animations[playerAction][aniIndex], (int)x, (int)y, 256, 160, null);
+		int playerHeight = (int)(Game.TILES_SIZE * 2.5);
+		int playerWidth = (int)(Game.TILES_SIZE * 2.5);
+
+		g.drawImage(animations[playerAction][aniIndex], (int)x, (int)y,  playerHeight, playerWidth, null);
 	}
 	
 	private void updateAnimationTick() {
@@ -103,7 +108,7 @@ public class Player extends Entity{
 	}
 	
 	private void loadAnimations() {
-		BufferedImage img = LoadSave.getSpriteAtlas(LoadSave.PLAYER_ATLAS);
+		BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.PLAYER_ATLAS);
 		animations = new BufferedImage[9][6];		
 		for (int j = 0; j <animations.length; j ++) {
 			for (int i = 0; i< animations[j].length; i ++) {				
