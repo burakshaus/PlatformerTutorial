@@ -21,28 +21,27 @@ public class Player extends Entity{
 	private int aniTick, aniIndex, aniSpeed = 15;
 	private int playerAction = IDLE;
 	private boolean moving = false, attacking = false;
-	
 	private boolean up,down,left,right;
 	private float playerSpeed = 2.0f;
-	public Player(float x, float y) {
-		super(x, y);
+	private int [][] lvlData;
+	
+	public Player(float x, float y, int width, int height) {
+		super(x, y, width, height);
 		loadAnimations();
-		// TODO Auto-generated constructor stub
 	}
 	
 	public void update() {
 		
 		updatePosition();
+		updateHitbox();
 		updateAnimationTick();	
 		setAnimation();
 		
 	}
 	
 	public void render(Graphics g) {
-		int playerHeight = (int)(Game.TILES_SIZE * 2.5);
-		int playerWidth = (int)(Game.TILES_SIZE * 2.5);
-
-		g.drawImage(animations[playerAction][aniIndex], (int)x, (int)y,  playerHeight, playerWidth, null);
+		g.drawImage(animations[playerAction][aniIndex], (int)x, (int)y,  width, height, null);
+		drawHitbox(g);
 	}
 	
 	private void updateAnimationTick() {
@@ -91,6 +90,7 @@ public class Player extends Entity{
 		if(left && !right) {
 			x-= playerSpeed;
 			moving = true;
+			
 		}else if(right && !left){
 			x += playerSpeed;
 			moving = true;
@@ -99,6 +99,7 @@ public class Player extends Entity{
 		if(up && !down) {
 			y-=playerSpeed;
 			moving = true;
+			
 		}else if(down && !up) {
 			y += playerSpeed;
 			moving = true;
@@ -116,6 +117,11 @@ public class Player extends Entity{
 			}
 		}		
 	}
+	
+	public void loadLvlData(int [][] lvlData) {
+		this.lvlData = lvlData;
+	}
+	
 	public void resetDirBooleans() {
 		left = false;
 		right = false;
